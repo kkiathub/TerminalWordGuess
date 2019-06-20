@@ -13,10 +13,11 @@ Letter.prototype.getChar = function() {
 }
 
 Letter.prototype.guess = function(newchar) {
-    if (this.char===" ")
+    // if this is a space or already guessed, return false.
+    if (this.isGuessed)
         return false;
 
-    if (newchar === this.char) 
+    if (newchar.toLowerCase() === this.char.toLowerCase()) 
         this.isGuessed = true;
     return this.isGuessed;
 }

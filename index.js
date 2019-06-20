@@ -9,10 +9,28 @@ var selWord = "";
 // randomly pick word function.
 const pickWordId = () => Math.floor(Math.random() * wordArr.length);
 
+function replayGame(gameresultMessage) {
+
+    console.log(gameresultMessage);
+    inquirer.prompt([
+        {
+            type: "confirm",
+            message: "Do you want to play another game:",
+            name: "confirm",
+            default: true
+        }
+    ]).then(function (response) {
+        // If the inquirerResponse confirms, we displays the inquirerResponse's username and pokemon from the answers.
+        if (response.confirm) {
+            newGame();
+        }
+    });
+}
+
 function pickLetter() {
     console.log("\n" + selWord.toString());
     if (selWord.isCompleted()) {
-        console.log("You got it!");
+        replayGame("You got it!");
         return;
     }
     inquirer.prompt([
@@ -27,6 +45,11 @@ function pickLetter() {
         } else {
             // guess wrong letter.
             console.log("INCORRECT!!!");
+            numGuesses--;
+            if (numGuesses === 0) {
+                replayGame("Game Over!");
+                return;
+            }
             console.log(numGuesses + " guesses remaining...")
         }
         pickLetter();
@@ -36,14 +59,12 @@ function pickLetter() {
 
 function newGame() {
     var wordId = pickWordId();
-    console.log(wordId);
+    console.log(wordId + " " + wordArr[wordId]);
 
     selWord = new Word(wordArr[wordId]);
     numGuesses = GUESS_LIMIT;
     pickLetter();
-
 }
-
 
 
 newGame();
