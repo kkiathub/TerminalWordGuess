@@ -2,7 +2,7 @@ var inquirer = require("inquirer");
 var Word = require("./word.js");
 var wordArr = require("./wordlist.js");
 
-const GUESS_LIMIT = 14;
+const GUESS_LIMIT = 12;
 
 var numGuesses;
 var selWord = "";
@@ -10,7 +10,7 @@ var selWord = "";
 const pickWordId = () => Math.floor(Math.random() * wordArr.length);
 
 function replayGame(gameresultMessage) {
-
+    // Prompt asking if you want to play another game.
     console.log(gameresultMessage);
     inquirer.prompt([
         {
@@ -20,7 +20,7 @@ function replayGame(gameresultMessage) {
             default: true
         }
     ]).then(function (response) {
-        // If the inquirerResponse confirms, we displays the inquirerResponse's username and pokemon from the answers.
+        // If the response confirms, we play another game.
         if (response.confirm) {
             newGame();
         }
@@ -30,6 +30,7 @@ function replayGame(gameresultMessage) {
 function pickLetter() {
     console.log("\n" + selWord.toString());
     if (selWord.isCompleted()) {
+        // got all letters, you win!
         replayGame("You got it!");
         return;
     }
@@ -42,9 +43,10 @@ function pickLetter() {
     ]).then(function (data) {
         if (selWord.check(data.letter)) {
             // guess it right.
+            console.log("\x1b[32m%s\x1b[0m", "CORRECT!!!");
         } else {
             // guess wrong letter.
-            console.log("INCORRECT!!!");
+            console.log("\x1b[31m%s\x1b[0m", "INCORRECT!!!");
             numGuesses--;
             if (numGuesses === 0) {
                 replayGame("Game Over!");
@@ -59,7 +61,7 @@ function pickLetter() {
 
 function newGame() {
     var wordId = pickWordId();
-    console.log(wordId + " " + wordArr[wordId]);
+    // console.log(wordId + " " + wordArr[wordId]);
 
     selWord = new Word(wordArr[wordId]);
     numGuesses = GUESS_LIMIT;
