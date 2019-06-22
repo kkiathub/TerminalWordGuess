@@ -10,6 +10,8 @@ This is a node.js terminal word guess application.  The word will be randomly gi
 
 3. Either win or lose, you will be asked if you want to start another game.
 
+    [VDO Demonstration](https://www.youtube.com/embed/K_-Mvtga_Tg)
+
 
 ---
 

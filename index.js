@@ -4,14 +4,17 @@ var wordArr = require("./wordlist.js");
 
 const GUESS_LIMIT = 12;
 
+const LOG_GREEN = "\x1b[32m%s\x1b[0m";
+const LOG_RED = "\x1b[31m%s\x1b[0m";
+
 var numGuesses;
 var selWord = "";
 // randomly pick word function.
 const pickWordId = () => Math.floor(Math.random() * wordArr.length);
 
-function replayGame(gameresultMessage) {
+function replayGame(gameresultMessage, logColor) {
     // Prompt asking if you want to play another game.
-    console.log(gameresultMessage);
+    console.log(logColor, gameresultMessage);
     inquirer.prompt([
         {
             type: "confirm",
@@ -31,7 +34,7 @@ function pickLetter() {
     console.log("\n" + selWord.toString());
     if (selWord.isCompleted()) {
         // got all letters, you win!
-        replayGame("You got it!");
+        replayGame("You got it!", LOG_GREEN);
         return;
     }
     inquirer.prompt([
@@ -43,13 +46,13 @@ function pickLetter() {
     ]).then(function (data) {
         if (selWord.check(data.letter)) {
             // guess it right.
-            console.log("\x1b[32m%s\x1b[0m", "CORRECT!!!");
+            console.log(LOG_GREEN, "CORRECT!!!");
         } else {
             // guess wrong letter.
-            console.log("\x1b[31m%s\x1b[0m", "INCORRECT!!!");
+            console.log(LOG_RED, "INCORRECT!!!");
             numGuesses--;
             if (numGuesses === 0) {
-                replayGame("Game Over!");
+                replayGame("Game Over!", LOG_RED);
                 return;
             }
             console.log(numGuesses + " guesses remaining...")
